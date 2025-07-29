@@ -1,0 +1,19 @@
+:root {
+    --cor-neutra-escura: #111111;
+    --cor-neutra-clara: #FFFFFF;
+    --cor-primaria-hover: #8d4de8;
+    --cor-primaria: #6528D3;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--cor-neutra-escura);
+    min-height: 100vh;
+    /* altura minima de um elemento para ser sempre visto da mesma forma mesmo numa tv com areas enormes*/
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer";
+}
