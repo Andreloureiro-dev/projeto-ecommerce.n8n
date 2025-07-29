@@ -105,9 +105,9 @@
     }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1170px) {
     .header {
-        max-width: 1440px;
+        max-width: 1170px;
         margin: 0 auto; /* Centraliza o cabeçalho */
     }
 }
