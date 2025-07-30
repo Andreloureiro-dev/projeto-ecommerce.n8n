@@ -19,6 +19,7 @@
 
 .footer nav ul li {
     margin-bottom: 0.7em;
+    color: var(--cor-roxa-clara);
 }
 
 .footer nav a {
@@ -30,4 +31,28 @@
 
 .footer nav a:hover {
     color: var(--cor-neutra-clara);
+}
+
+.footer .copyright {
+    background-color: var(--cor-neutra-escura);
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--cor-neutra-clara);
+    letter-spacing: 0.1rem;
+}
+
+@media (min-width: 1024px) {
+    .footer .container {
+        flex-direction: row;
+        width: 100%;
+        gap: 13rem;
+        padding: 4rem 1rem;
+    }
+}
+
+@media (min-width: 1120px) {
+    .footer .container {
+        width: 1170px;
+        margin: 0 auto;
+    }
 }
