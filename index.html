@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/produtos.css">
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/carrinho.css">
+
 </head>
 
 <body>
@@ -63,7 +65,7 @@
                         <span>Cor: roxa</span>
                         <span>Tamanho: M</span>
                         <span class="preco">Preço: 20€</span>
-                        <button>Adicionar ao carrinho</button>
+                        <button class="add-carrinho">Adicionar ao carrinho</button>
                     </div>
                 </li>
                 <li class="produto">
@@ -72,10 +74,9 @@
                         <figcaption>Caneca deve em dobro</figcaption>
                     </figure>
                     <div class="informacoes">
-                        <span>Cor: roxa</span>
-                        <span>Tamanho: M</span>
+                        <span>Cor: branca</span>
                         <span class="preco">Preço: 15€</span>
-                        <button>Adicionar ao carrinho</button>
+                        <button class="add-carrinho">Adicionar ao carrinho</button>
                     </div>
                 </li>
                 <li class="produto">
@@ -87,7 +88,7 @@
                         <span>Cor: roxa</span>
                         <span>Tamanho: M</span>
                         <span class="preco">Preço: 20€</span>
-                        <button>Adicionar ao carrinho</button>
+                        <button class="add-carrinho">Adicionar ao carrinho</button>
                     </div>
                 </li>
                 <li class="produto">
@@ -99,7 +100,7 @@
                         <span>Cor: roxa</span>
                         <span>Tamanho: M</span>
                         <span class="preco">Preço: 20€</span>
-                        <button>Adicionar ao carrinho</button>
+                        <button class="add-carrinho">Adicionar ao carrinho</button>
                     </div>
                 </li>
                 <li class="produto">
@@ -111,7 +112,7 @@
                         <span>Cor: roxa</span>
                         <span>Tamanho: M</span>
                         <span class="preco">Preço: 20€</span>
-                        <button>Adicionar ao carrinho</button>
+                        <button class="add-carrinho">Adicionar ao carrinho</button>
                     </div>
                 </li>
                 <li class="produto">
@@ -123,7 +124,7 @@
                         <span>Cor: roxa</span>
                         <span>Tamanho: M</span>
                         <span class="preco">Preço: 20€</span>
-                        <button>Adicionar ao carrinho</button>
+                        <button class="add-carrinho">Adicionar ao carrinho</button>
                     </div>
                 </li>
                 <li class="produto">
@@ -135,7 +136,7 @@
                         <span>Cor: roxa</span>
                         <span>Tamanho: M</span>
                         <span class="preco">Preço: 20€</span>
-                        <button>Adicionar ao carrinho</button>
+                        <button class="add-carrinho">Adicionar ao carrinho</button>
                     </div>
                 </li>
                 <li class="produto">
@@ -147,7 +148,7 @@
                         <span>Cor: roxa</span>
                         <span>Tamanho: M</span>
                         <span class="preco">Preço: 20€</span>
-                        <button>Adicionar ao carrinho</button>
+                        <button class="add-carrinho">Adicionar ao carrinho</button>
                     </div>
                 </li>
                 <li class="produto">
@@ -159,7 +160,7 @@
                         <span>Cor: roxa</span>
                         <span>Tamanho: M</span>
                         <span class="preco">Preço: 20€</span>
-                        <button>Adicionar ao carrinho</button>
+                        <button class="add-carrinho">Adicionar ao carrinho</button>
                     </div>
                 </li>
             </ul>
@@ -212,25 +213,25 @@
                 </ul>
             </nav>
         </div>
-            <div class="copyright">
-                <p>©2024 E-commerce com n8n. Todos os direitos reservados.</p>
-            </div>
+        <div class="copyright">
+            <p>©2024 E-commerce com n8n. Todos os direitos reservados.</p>
+        </div>
     </footer>
-        
 
-    <!-- <div id="modal-1" class="modal" aria-hidden="true">
+
+    <div id="modal-1" class="modal" aria-hidden="true">
 
         <div tabindex="-1" data-micromodal-close>
 
-            <div role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
 
 
-                <header>
+                <header class="modal-header">
                     <h2 id="modal-1-title">
                         Carrinho de compras
                     </h2>
 
-                    <button aria-label="Close modal" data-micromodal-close></button>
+                    <button class="close-modal" aria-label="Close modal" data-micromodal-close></button>
                 </header>
 
                 <div id="modal-1-content">
@@ -238,44 +239,44 @@
                         <thead>
 
                             <tr>
-                                <th>Produto</th>
+                                <th class="th-produto">Produto</th>
                                 <th>Descrição</th>
                                 <th>Preço</th>
                                 <th>Quantidade</th>
-                                <th>Total</th>
+                                <th class="th-total">Total</th>
                                 <th></th>
                             </tr>
 
                         </thead>
                         <tbody>
                             <tr>
-                                <td><img src="assets/images/camiseta_roxa.jpg" alt="T-shirt roxa"></td>
+                                <td class="td-produto"><img src="assets/images/camiseta_roxa.jpg" alt="T-shirt roxa"></td>
                                 <td>T-shirt roxa</td>
-                                <td>20€</td>
-                                <td><input type="number" min="1" value="1"></td>
-                                <td>20€</td>
-                                <td><button>Remover</button></td>
+                                <td class="td-preco-unitario">20€</td>
+                                <td class="td-quantidade"><input type="number" min="1" value="1"></td>
+                                <td class="td-preco-total">20€</td>
+                                <td><button class="btn-remover"></button></td>
                             </tr>
                             <tr>
-                                <td><img src="assets/images/caneca_devemdobro.jpg" alt="Caneca deve em dobro"></td>
+                                <td class="td-produto"><img src="assets/images/caneca_devemdobro.jpg" alt="Caneca deve em dobro"></td>
                                 <td>Caneca deve em dobro</td>
-                                <td>15€</td>
-                                <td><input type="number" min="1" value="1"></td>
-                                <td>15€</td>
-                                <td><button>Remover</button></td>
+                                <td class="td-preco-unitario">15€</td>
+                                <td class="td-quantidade"><input type="number" min="1" value="1"></td>
+                                <td class="td-preco-total">15€</td>
+                                <td><button class="btn-remover"></button></td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <div>
-                        <span id="total-carrinho">Total: 35€</span>
-                        <button>Finalizar compra</button>
+                    <div class="container-preco">
+                        <span class="total-carrinho" id="total-carrinho">Total: 35€</span>
+                        <button class="btn-finalizar">Finalizar compra</button>
                     </div>
                 </div>
 
             </div>
         </div>
-    </div> -->
+    </div>
 
     <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
 

@@ -21,6 +21,9 @@ main section ul {
     background-color: var(--cor-cinza-escura);
     max-width: 368px;
     border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .produto figure img {
@@ -63,7 +66,7 @@ main .informacoes .preco {
     text-align: right;
 }
 
-main .informacoes button {
+main .informacoes .add-carrinho {
     background-color: var(--cor-primaria);
     color: var(--cor-neutra-clara);
     border: none;
@@ -72,9 +75,12 @@ main .informacoes button {
     cursor: pointer;
     margin-top: 0.5rem;
     transition: background-color 0.3s ease-in-out;
+
+    font-size: 1.2rem;
+    letter-spacing: 0.1rem;
 }
 
-main .informacoes button:hover {
+main .informacoes .add-carrinho:hover {
     background-color: var(--cor-primaria-hover);
 }
 
