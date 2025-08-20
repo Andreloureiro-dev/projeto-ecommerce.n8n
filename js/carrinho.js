@@ -17,12 +17,13 @@ Objetivo 3 - Atualizar valores do carrinho (a ser implementado):
     - Recalcular total geral
 */
 
+//Objetivo 1
 
-// Seleciona todos os botões de "Adicionar ao carrinho" na página
+//Seleciona todos os botões de "Adicionar ao carrinho" na página
 const adicionarAoCarrinho = document.querySelectorAll('.add-carrinho');
 
 
-// Para cada botão de adicionar ao carrinho, adiciona um ouvinte de clique
+//Para cada botão de adicionar ao carrinho, adiciona um ouvinte de clique
 adicionarAoCarrinho.forEach(botao => {
     botao.addEventListener("click", (event) => {
         // Encontra o elemento do produto mais próximo do botão clicado
@@ -129,3 +130,28 @@ function renderizarTabelaDoCarrinho(){
 }
 
 renderizarTabelaDoCarrinho();
+
+// Objetivo 2: Implementar a funcionalidade de remoção de produtos do carrinho
+
+// passo 1 - apanhar o botao de remover do html
+const corpoTabela = document.querySelector("#modal-1-content table tbody");
+
+corpoTabela.addEventListener("click", evento => {
+    if (evento.target.classList.contains("btn-remover")) {
+        const id = evento.target.dataset.id;
+        removerProdutoDoCarrinho(id);
+    }
+});
+
+function removerProdutoDoCarrinho(id) {
+
+    // Obtém os produtos do carrinho
+    const produtos = obterProdutosDoCarrinho();
+
+    // filtra os produtos que não têm o id do produto a remover
+    const carrinhoAtualizado = produtos.filter(produto => produto.id !== id);
+
+    guardarProdutosNoCarrinho(carrinhoAtualizado);
+    atualizarContadorCarrinho();
+    renderizarTabelaDoCarrinho();
+}
