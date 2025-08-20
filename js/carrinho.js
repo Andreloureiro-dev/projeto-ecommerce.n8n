@@ -116,7 +116,7 @@ function renderizarTabelaDoCarrinho(){
             <td class="td-produto"><img src="${produto.imagem}" alt="${produto.nome}"></td>
             <td>${produto.nome}</td>
             <td class="td-preco-unitario">${produto.preco.toFixed(2).replace(".", ",")}€</td>
-            <td class="td-quantidade"><input type="number" min="1" value="${produto.quantidade}"></td>
+            <td class="td-quantidade"><input type="number" value="${produto.quantidade}" min="1" data-id="${produto.id}"></td>
             <td class="td-preco-total">${(produto.preco * produto.quantidade).toFixed(2).replace(".", ",")}€</td>
             <td><button class="btn-remover" id data-id="${produto.id}"></button></td>
         `;
