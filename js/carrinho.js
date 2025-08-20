@@ -66,8 +66,12 @@ adicionarAoCarrinho.forEach(botao => {
             carrinho.push(produto);
         }
 
-        // Salva o carrinho atualizado no localStorage
+        // Guarda o carrinho atualizado no localStorage
         guardarProdutosNoCarrinho(carrinho);
+        //Chama a função para atualizar o contador do carrinho
+        atualizarContadorCarrinho();
+        // Chama a função para renderizar a tabela do carrinho
+        renderizarTabelaDoCarrinho();
     });
 });
 
@@ -88,18 +92,40 @@ function obterProdutosDoCarrinho() {
 //atualizar o contador do carrinho de compras
 
 function atualizarContadorCarrinho() {
-    const carrinho = obterProdutosDoCarrinho();
+    const produtos = obterProdutosDoCarrinho();
     let total = 0;
 
-    carrinho.forEach(produto => {
+    produtos.forEach(produto => {
         total += produto.quantidade;
     });
 
     document.getElementById("contador-carrinho").textContent = total;
     
 }
-
+// Chama a função para atualizar o contador do carrinho
 atualizarContadorCarrinho();
 
+// Mostra os produtos do carrinho na modal
 
+function renderizarTabelaDoCarrinho(){
+    const produtos = obterProdutosDoCarrinho();
+    const conteudoTabela = document.querySelector("#modal-1-content table tbody");
 
+    conteudoTabela.innerHTML = ""; // Limpa o conteúdo atual da tabela
+
+    produtos.forEach(produto => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td class="td-produto"><img src="${produto.imagem}" alt="${produto.nome}"></td>
+            <td>${produto.nome}</td>
+            <td class="td-preco-unitario">${produto.preco.toFixed(2).replace(".", ",")}€</td>
+            <td class="td-quantidade"><input type="number" min="1" value="${produto.quantidade}"></td>
+            <td class="td-preco-total">${(produto.preco * produto.quantidade).toFixed(2).replace(".", ",")}€</td>
+            <td><button class="btn-remover" id data-id="${produto.id}"></button></td>
+        `;
+        conteudoTabela.appendChild(tr);
+    });
+        
+}
+
+renderizarTabelaDoCarrinho();
