@@ -214,7 +214,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="td-produto"><img src="assets/images/camiseta_roxa.jpg" alt="T-shirt roxa"></td>
+                                <td class="td-produto"><img src="assets/images/camiseta_roxa.jpg" alt="T-shirt roxa">
+                                </td>
                                 <td>T-shirt roxa</td>
                                 <td class="td-preco-unitario">20€</td>
                                 <td class="td-quantidade"><input type="number" min="1" value="1"></td>
@@ -222,7 +223,8 @@
                                 <td><button class="btn-remover"></button></td>
                             </tr>
                             <tr>
-                                <td class="td-produto"><img src="assets/images/caneca_devemdobro.jpg" alt="Caneca deve em dobro"></td>
+                                <td class="td-produto"><img src="assets/images/caneca_devemdobro.jpg"
+                                        alt="Caneca deve em dobro"></td>
                                 <td>Caneca deve em dobro</td>
                                 <td class="td-preco-unitario">15€</td>
                                 <td class="td-quantidade"><input type="number" min="1" value="1"></td>
@@ -233,7 +235,31 @@
                     </table>
 
                     <div class="container-preco">
-                        <span class="total-carrinho" id="total-carrinho">Total: 0€</span>
+
+                        <div class="container-cep-frete">
+
+                            <label for="cep">Calcular frete:</label>
+
+                            <div class="container-cep-inputs">
+                                <input type="text" id="input-cep" placeholder="Digite seu CEP">
+                                <button id="btn-calcular-frete">Calcular frete</button>
+                            </div>
+                        </div>
+
+                        <div class="container-preco-total">
+
+                            <span id="subtotal-pedidos">Subtotal dos pedidos:
+                                <span class="valor">35,00€</span>
+                            </span>
+
+                            <span id="valor-frete">Valor do frete:
+                                <span></span>
+                            </span>
+
+
+                            <span class="total-carrinho" id="total-carrinho">Total: 0€</span>
+                        </div>
+
                         <button class="btn-finalizar">Finalizar compra</button>
                     </div>
                 </div>

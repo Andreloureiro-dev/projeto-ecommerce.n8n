@@ -9,6 +9,11 @@
     --cor-cinza-escura: #29272a;
     --cor-cinza-clara: #ededed;
     --cor-roxa-clara: #bca2ed;
+
+    /* Cores para estelização da parte do cep */
+    --cor-cep-label: #e0e0e0;
+    --cor-cep-texto: #6affb7;
+    --cor-cep-hover: #1a1a2e;
 }
 
 body {

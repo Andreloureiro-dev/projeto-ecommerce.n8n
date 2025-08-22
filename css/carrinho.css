@@ -125,6 +125,93 @@ thead th {
     background-color: var(--cor-primaria-hover);
 }
 
+.container-preco-total {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 1rem;
+}
+
+#subtotal-pedidos,
+#valor-frete {
+    color: var(--cor-cep-label);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#valor-frete {
+    display: none;
+}
+
+#subtotal-pedidos .valor,#valor-frete .valor {
+    color: var(--cor-cep-texto);
+    font-weight: 500;
+    margin-left: 8px;
+}
+
+#total-carrinho {
+    color: var(--cor-cep-texto);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 8px;
+    display: block;
+    text-align: right;
+}
+
+#input-cep {
+    padding: 8px 12px;
+    width: 100%;
+    max-width: 220px;
+    border: 1px solid var(--cor-cep-texto);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--cor-cep-texto);
+    font-size: 1rem;
+    font-weight: 400;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#input-cep::placeholder {
+    color: var(--cor-cep-texto);
+    opacity: 0.5;
+    font-weight: 400;
+}
+
+#btn-calcular-frete {
+    padding: 8px 12px;
+    border: 1px solid var(--cor-cep-texto);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--cor-cep-texto);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+#btn-calcular-frete:hover, #btn-calcular-frete:focus {
+    background: var(--cor-cep-texto);
+    color: var(--cor-cep-hover);
+}
+
+.container-cep-frete {
+    display: flex;
+    flex-direction: column;
+    margin: 16px 0;
+    gap: 8px;
+}
+
+.container-cep-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+}
+
 @media (min-width: 769px) {
 
     .modal.is-open {
