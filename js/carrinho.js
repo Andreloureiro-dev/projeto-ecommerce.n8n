@@ -201,10 +201,12 @@ function atualizarCarrinhoETabela() {
 atualizarCarrinhoETabela()
 
 
-// Função para calcular o frete via API externa com n8n
-
 async function calcularFrete(cep) {
-	//TROQUE PELA SUA URL DO N8N
+	btnCalcularFrete.disabled = true;
+	const textoOriginalDoBotaoDeFrete = btnCalcularFrete.textContent;
+	btnCalcularFrete.textContent = "Calculando frete...";
+
+	// URL do webhook para calcular o frete
 	const url = "https://andreloureiro.app.n8n.cloud/webhook/ff7f8df3-829a-47a0-8b73-1f88b82866d1";
 	try {
 		// Busca as medidas dos produtos do arquivo JSON
@@ -234,12 +236,14 @@ async function calcularFrete(cep) {
 		});
 		if (!resposta.ok) throw new Error("Erro ao calcular frete");
 		const resultado = await resposta.json();
-        console.log(resultado);
 		// Supondo que o resultado tenha a propriedade frete
 		return resultado.price;
 	} catch (erro) {
 		console.error("Erro ao calcular frete:", erro);
 		return null;
+	}finally{
+		btnCalcularFrete.disabled = false;
+		btnCalcularFrete.textContent = textoOriginalDoBotaoDeFrete;
 	}
 }
 
@@ -247,74 +251,37 @@ const btnCalcularFrete = document.getElementById("btn-calcular-frete");
 const inputCep = document.getElementById("input-cep");
 const valorFrete = document.getElementById("valor-frete");
 
-inputCep.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-        btnCalcularFrete.click();
-    }
+inputCep.addEventListener("keydown", () => {
+	if(event.key === "Enter") {
+		btnCalcularFrete.click();
+	}
 });
 
 btnCalcularFrete.addEventListener("click", async () => {
 	const cep = inputCep.value.trim();
+
+	// Validação do CEP
+	const erroCep = document.querySelector(".erro");
+	if (!validarCep(cep)) {
+		erroCep.textContent = "CEP inválido.";
+		erroCep.style.display = "block";
+		return;
+	}
+
 	const valorFrete = await calcularFrete(cep);	
 	const precoFormatado = valorFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 	document.querySelector("#valor-frete .valor").textContent = precoFormatado;
 	document.querySelector("#valor-frete").style.display = "flex";
 
-	const totalCarrinhoElemento = document.querySelector("#total-carrinho");
-	const valorTotalCarrinho = parseFloat(totalCarrinhoElemento.textContent.replace("Total: R$ ", "").replace('.', ',').replace(',', '.'));
-	
-	const totalComFrete = valorTotalCarrinho + valorFrete;
-	const totalComFreteFormatado = totalComFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-	totalCarrinhoElemento.textContent = `Total: R$ ${totalComFreteFormatado}`;
-});
-
-
-function validarCep(cep) {
-    // expressão regular para validar o CEP
-    const regexCep = /^[0-9]{5}-[0-9]{3}$|^[0-9]{8}$/;
-    return regexCep.test(cep);
-}
-
-// Função para exibir mensagem de erro na modal do carrinho
-function exibirErroCep(mensagem) {
-    let erroCep = document.getElementById('erro-cep');
-    if (!erroCep) {
-        const containerPrecoTotal = document.querySelector('.container-preco-total');
-        erroCep = document.createElement('span');
-        erroCep.id = 'erro-cep';
-        erroCep.style.color = 'red';
-        erroCep.style.fontSize = '0.95rem';
-        erroCep.style.marginTop = '4px';
-        containerPrecoTotal.insertBefore(erroCep, containerPrecoTotal.firstChild);
-    }
-    erroCep.textContent = mensagem;
-}
-
-function removerErroCep() {
-    const erroCep = document.getElementById('erro-cep');
-    if (erroCep) erroCep.remove();
-}
-
-// Atualizar o evento do botão calcular frete para validar o CEP antes de calcular
-btnCalcularFrete.addEventListener("click", async () => {
-    const cep = inputCep.value.trim();
-    removerErroCep();
-    if (!validarCep(cep)) {
-        exibirErroCep('CEP inválido.');
-        return;
-    }
-    const valorFrete = await calcularFrete(cep);
-    if (valorFrete === null) {
-        exibirErroCep('Erro ao calcular o frete. Tente novamente.');
-        return;
-    }
-    const precoFormatado = valorFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.querySelector("#valor-frete .valor").textContent = precoFormatado;
-    document.querySelector("#valor-frete").style.display = "flex";
-
     const totalCarrinhoElemento = document.querySelector("#total-carrinho");
-    const valorTotalCarrinho = parseFloat(totalCarrinhoElemento.textContent.replace("Total: R$ ", "").replace('.', ',').replace(',', '.'));
+    const valorTotalCarrinho = parseFloat(totalCarrinhoElemento.textContent.replace(/[^0-9,.-]+/g, '').replace('.', '').replace(',', '.'));
     const totalComFrete = valorTotalCarrinho + valorFrete;
     const totalComFreteFormatado = totalComFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    totalCarrinhoElemento.textContent = `Total: R$ ${totalComFreteFormatado}`;
+    totalCarrinhoElemento.textContent = `Total: ${totalComFreteFormatado}`;
 });
+
+function validarCep(cep){
+	//expressão regular para validar o cep, se é vazio, se tem mais de 8 caracteres ou menos de 8 caracteres, se contém apenas números
+	const regexCep = /^[0-9]{5}-?[0-9]{3}$/;
+	return regexCep.test(cep);
+}
