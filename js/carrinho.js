@@ -19,26 +19,26 @@ Objetivo 3 - Atualizar valores do carrinho (a ser implementado):
 
 //Objetivo 1
 
-//Seleciona todos os botões de "Adicionar ao carrinho" na página
+// Seleciona todos os botões de "Adicionar ao carrinho" para permitir adicionar produtos ao carrinho
 const adicionarAoCarrinho = document.querySelectorAll('.add-carrinho');
 
 
-//Para cada botão de adicionar ao carrinho, adiciona um ouvinte de clique
+// Adiciona um ouvinte de clique em cada botão para capturar o produto selecionado
 adicionarAoCarrinho.forEach(botao => {
     botao.addEventListener("click", (event) => {
-        // Encontra o elemento do produto mais próximo do botão clicado
+    // Localiza o elemento do produto correspondente ao botão clicado
         const elementoProduto = event.target.closest(".produto");
 
-        // Obtém o id do produto a partir do atributo data-id
+    // Recupera o id do produto usando o atributo data-id do HTML
         const produtoid = elementoProduto.dataset.id;
 
-        // Obtém o nome do produto (deve estar em um elemento com a classe .nome)
+    // Recupera o nome do produto a partir do elemento com a classe .nome
         const produtoNome = elementoProduto.querySelector(".nome").textContent;
 
-        // Obtém o caminho da imagem do produto (primeira imagem encontrada dentro do produto)
+    // Recupera o caminho da imagem do produto para exibir no carrinho
         const produtoImagem = elementoProduto.querySelector("img").getAttribute("src");
 
-        // Obtém o preço do produto, faz o tratamento para converter para número
+    // Recupera o preço do produto, removendo símbolos e formatando para número
         const produtoPreco = parseFloat(
             elementoProduto.querySelector(".preco").textContent
                 .replace(".", "")      // remove o ponto dos milhares
@@ -48,16 +48,16 @@ adicionarAoCarrinho.forEach(botao => {
                 .trim()                // remove espaços extras
         );
 
-        // Recupera o carrinho atual do localStorage
+    // Busca o carrinho atual salvo no localStorage para atualizar ou adicionar produtos
         const carrinho = obterProdutosDoCarrinho();
 
-        // Verifica se o produto já está no carrinho
+    // Verifica se o produto já existe no carrinho para somar quantidade ou adicionar novo
         const existeProduto = carrinho.find(item => item.id === produtoid);
         if (existeProduto) {
-            // Se já existe, incrementa a quantidade
+            // Se o produto já está no carrinho, apenas incrementa a quantidade
             existeProduto.quantidade += 1;
         } else {
-            // Se não existe, cria um novo objeto de produto e adiciona ao carrinho
+            // Se o produto não está no carrinho, cria um novo objeto e adiciona ao array
             const produto = {
                 id: produtoid,
                 nome: produtoNome,
@@ -68,27 +68,27 @@ adicionarAoCarrinho.forEach(botao => {
             carrinho.push(produto);
         }
 
-        // Guarda o carrinho atualizado no localStorage
+    // Salva o carrinho atualizado no localStorage para persistência dos dados
         guardarProdutosNoCarrinho(carrinho);
-        atualizarCarrinhoETabela();
+    atualizarCarrinhoETabela(); // Atualiza o contador, tabela e valores totais do carrinho
     });
 });
 
 
-// Salva o array de produtos do carrinho no localStorage
+// Função para salvar o array de produtos do carrinho no localStorage
 function guardarProdutosNoCarrinho(carrinho) {
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
 }
 
 
-// Recupera o array de produtos do carrinho do localStorage
-// Se não houver nada salvo, retorna um array vazio
+// Função para recuperar o array de produtos do carrinho do localStorage
+// Retorna um array vazio caso não exista nada salvo ainda
 function obterProdutosDoCarrinho() {
     const produtos = localStorage.getItem("carrinho");
     return produtos ? JSON.parse(produtos) : [];
 }
 
-//atualizar o contador do carrinho de compras
+// Atualiza o contador de itens do carrinho exibido no ícone do carrinho
 
 function atualizarContadorCarrinho() {
     const produtos = obterProdutosDoCarrinho();
@@ -103,13 +103,13 @@ function atualizarContadorCarrinho() {
 }
 
 
-// Mostra os produtos do carrinho na modal
+// Renderiza a tabela de produtos do carrinho dentro da modal
 
 function renderizarTabelaDoCarrinho(){
     const produtos = obterProdutosDoCarrinho();
     const conteudoTabela = document.querySelector("#modal-1-content table tbody");
 
-    conteudoTabela.innerHTML = ""; // Limpa o conteúdo atual da tabela
+    conteudoTabela.innerHTML = ""; // Limpa o conteúdo atual da tabela antes de renderizar novamente
 
     produtos.forEach(produto => {
         const tr = document.createElement("tr");
@@ -126,27 +126,27 @@ function renderizarTabelaDoCarrinho(){
         
 }
 
-// Objetivo 2: Implementar a funcionalidade de remoção de produtos do carrinho
+// Objetivo 2: Implementar a funcionalidade de remoção de produtos do carrinho ao clicar no botão de remover
 
-// passo 1 - apanhar o botao de remover do html
+// Seleciona o corpo da tabela para delegar eventos de remoção e alteração de quantidade
 const corpoTabela = document.querySelector("#modal-1-content table tbody");
 
-// Passo 2 - Adiciona um ouvinte de clique ao corpo da tabela ( elemento pai )
+// Adiciona um ouvinte de clique ao tbody para capturar cliques em botões de remover
 corpoTabela.addEventListener("click", evento => {
     if (evento.target.classList.contains("btn-remover")) {
         const id = evento.target.dataset.id;
 
-        // passo 3 - remove o produto do carrinho ( local storage )
+    // Remove o produto do carrinho (localStorage) ao clicar no botão de remover
         removerProdutoDoCarrinho(id);
     }
 });
 
-// Objetivo 3 - passo 1 - adiciona um ouvinte de input no tbody para a quantidade de produtos
+// Adiciona um ouvinte de input no tbody para atualizar a quantidade de produtos em tempo real
 corpoTabela.addEventListener("input", evento => {
     if (evento.target.type === "number") {
         const produtos = obterProdutosDoCarrinho();
         const produto = produtos.find(produto => produto.id === evento.target.dataset.id);
-        let novaQuantidade = parseInt(evento.target.value);
+    let novaQuantidade = parseInt(evento.target.value); // Nova quantidade informada pelo usuário
         if (produto) {
             produto.quantidade = novaQuantidade;
 
@@ -157,22 +157,22 @@ corpoTabela.addEventListener("input", evento => {
 });
 
 
-// passo 4 - função para atualizar o html do carrinho aquando de tirar o produto
+// Remove o produto do carrinho pelo id e atualiza a tabela/modal
 function removerProdutoDoCarrinho(id) {
 
-    // Obtém os produtos do carrinho
+    // Obtém todos os produtos do carrinho salvos no localStorage
     const produtos = obterProdutosDoCarrinho();
 
-    // filtra os produtos que não têm o id do produto a remover
+    // Filtra os produtos para remover aquele com o id informado
     const carrinhoAtualizado = produtos.filter(produto => produto.id !== id);
 
     guardarProdutosNoCarrinho(carrinhoAtualizado);
     atualizarCarrinhoETabela()
 }
 
-// passo 3 - atualizar o valor total do carrinho
+// Atualiza o valor total do carrinho e o subtotal dos pedidos
 
-// Atualiza o subtotal dos produtos e o total do carrinho (sem frete)
+// Calcula e atualiza o subtotal dos produtos e o total do carrinho (sem considerar o frete)
 function atualizarValorTotalCarrinho() {
     const produtos = obterProdutosDoCarrinho();
     let subtotal = 0;
@@ -181,16 +181,17 @@ function atualizarValorTotalCarrinho() {
         subtotal += produto.preco * produto.quantidade;
     });
 
-    // Atualiza o subtotal dos pedidos
+    // Atualiza o valor do subtotal dos pedidos na modal
     const spanSubtotal = document.querySelector('#subtotal-pedidos .valor');
     if (spanSubtotal) {
         spanSubtotal.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
     }
 
-    // Atualiza o total do carrinho (sem frete)
+    // Atualiza o valor total do carrinho exibido na modal (sem frete)
     document.querySelector(".total-carrinho").textContent = `Total: R$ ${subtotal.toFixed(2).replace('.', ',')}`;
 }
 
+// Atualiza o contador, a tabela e o valor total do carrinho de uma só vez
 function atualizarCarrinhoETabela() {
     atualizarContadorCarrinho();
     renderizarTabelaDoCarrinho();
@@ -246,6 +247,12 @@ const btnCalcularFrete = document.getElementById("btn-calcular-frete");
 const inputCep = document.getElementById("input-cep");
 const valorFrete = document.getElementById("valor-frete");
 
+inputCep.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        btnCalcularFrete.click();
+    }
+});
+
 btnCalcularFrete.addEventListener("click", async () => {
 	const cep = inputCep.value.trim();
 	const valorFrete = await calcularFrete(cep);	
@@ -259,4 +266,55 @@ btnCalcularFrete.addEventListener("click", async () => {
 	const totalComFrete = valorTotalCarrinho + valorFrete;
 	const totalComFreteFormatado = totalComFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 	totalCarrinhoElemento.textContent = `Total: R$ ${totalComFreteFormatado}`;
+});
+
+
+function validarCep(cep) {
+    // expressão regular para validar o CEP
+    const regexCep = /^[0-9]{5}-[0-9]{3}$|^[0-9]{8}$/;
+    return regexCep.test(cep);
+}
+
+// Função para exibir mensagem de erro na modal do carrinho
+function exibirErroCep(mensagem) {
+    let erroCep = document.getElementById('erro-cep');
+    if (!erroCep) {
+        const containerPrecoTotal = document.querySelector('.container-preco-total');
+        erroCep = document.createElement('span');
+        erroCep.id = 'erro-cep';
+        erroCep.style.color = 'red';
+        erroCep.style.fontSize = '0.95rem';
+        erroCep.style.marginTop = '4px';
+        containerPrecoTotal.insertBefore(erroCep, containerPrecoTotal.firstChild);
+    }
+    erroCep.textContent = mensagem;
+}
+
+function removerErroCep() {
+    const erroCep = document.getElementById('erro-cep');
+    if (erroCep) erroCep.remove();
+}
+
+// Atualizar o evento do botão calcular frete para validar o CEP antes de calcular
+btnCalcularFrete.addEventListener("click", async () => {
+    const cep = inputCep.value.trim();
+    removerErroCep();
+    if (!validarCep(cep)) {
+        exibirErroCep('CEP inválido.');
+        return;
+    }
+    const valorFrete = await calcularFrete(cep);
+    if (valorFrete === null) {
+        exibirErroCep('Erro ao calcular o frete. Tente novamente.');
+        return;
+    }
+    const precoFormatado = valorFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.querySelector("#valor-frete .valor").textContent = precoFormatado;
+    document.querySelector("#valor-frete").style.display = "flex";
+
+    const totalCarrinhoElemento = document.querySelector("#total-carrinho");
+    const valorTotalCarrinho = parseFloat(totalCarrinhoElemento.textContent.replace("Total: R$ ", "").replace('.', ',').replace(',', '.'));
+    const totalComFrete = valorTotalCarrinho + valorFrete;
+    const totalComFreteFormatado = totalComFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    totalCarrinhoElemento.textContent = `Total: R$ ${totalComFreteFormatado}`;
 });
