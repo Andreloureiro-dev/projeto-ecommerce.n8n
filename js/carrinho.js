@@ -44,6 +44,7 @@ adicionarAoCarrinho.forEach(botao => {
                 .replace(".", "")      // remove o ponto dos milhares
                 .replace(",", ".")     // troca vírgula por ponto decimal
                 .replace("€", "")      // remove o símbolo do euro
+                .replace("R$", "")     // remove o símbolo do real se houver
                 .trim()                // remove espaços extras
         );
 
@@ -115,9 +116,9 @@ function renderizarTabelaDoCarrinho(){
         tr.innerHTML = `
             <td class="td-produto"><img src="${produto.imagem}" alt="${produto.nome}"></td>
             <td>${produto.nome}</td>
-            <td class="td-preco-unitario">${produto.preco.toFixed(2).replace(".", ",")}€</td>
+            <td class="td-preco-unitario">R$ ${produto.preco.toFixed(2).replace(".", ",")}</td>
             <td class="td-quantidade"><input type="number" value="${produto.quantidade}" min="1" data-id="${produto.id}"></td>
-            <td class="td-preco-total">${(produto.preco * produto.quantidade).toFixed(2).replace(".", ",")}€</td>
+            <td class="td-preco-total">R$ ${(produto.preco * produto.quantidade).toFixed(2).replace(".", ",")}</td>
             <td><button class="btn-remover" id data-id="${produto.id}"></button></td>
         `;
         conteudoTabela.appendChild(tr);
@@ -170,15 +171,24 @@ function removerProdutoDoCarrinho(id) {
 }
 
 // passo 3 - atualizar o valor total do carrinho
+
+// Atualiza o subtotal dos produtos e o total do carrinho (sem frete)
 function atualizarValorTotalCarrinho() {
     const produtos = obterProdutosDoCarrinho();
-    let total = 0;
+    let subtotal = 0;
 
     produtos.forEach(produto => {
-        total += produto.preco * produto.quantidade;
+        subtotal += produto.preco * produto.quantidade;
     });
 
-    document.querySelector(".total-carrinho").textContent = `Total: ${total.toFixed(2).replace(".", ",")}€`;
+    // Atualiza o subtotal dos pedidos
+    const spanSubtotal = document.querySelector('#subtotal-pedidos .valor');
+    if (spanSubtotal) {
+        spanSubtotal.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+    }
+
+    // Atualiza o total do carrinho (sem frete)
+    document.querySelector(".total-carrinho").textContent = `Total: R$ ${subtotal.toFixed(2).replace('.', ',')}`;
 }
 
 function atualizarCarrinhoETabela() {
@@ -188,3 +198,65 @@ function atualizarCarrinhoETabela() {
 }
 
 atualizarCarrinhoETabela()
+
+
+// Função para calcular o frete via API externa com n8n
+
+async function calcularFrete(cep) {
+	//TROQUE PELA SUA URL DO N8N
+	const url = "https://andreloureiro.app.n8n.cloud/webhook/ff7f8df3-829a-47a0-8b73-1f88b82866d1";
+	try {
+		// Busca as medidas dos produtos do arquivo JSON
+		const medidasResponse = await fetch('./js/medidas-produtos.json');
+		const medidas = await medidasResponse.json();
+
+		// Monta o array de produtos do carrinho com as medidas corretas
+		const produtos = obterProdutosDoCarrinho();
+		const products = produtos.map(produto => {
+			// Procura as medidas pelo id do produto
+			const medida = medidas.find(m => m.id === produto.id);
+			return {
+				quantity: produto.quantidade,
+				height: medida ? medida.height : 4,
+				length: medida ? medida.length : 30,
+				width: medida ? medida.width : 25,
+				weight: medida ? medida.weight : 0.25
+			};
+		});
+
+		const resposta = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({cep, products}),
+		});
+		if (!resposta.ok) throw new Error("Erro ao calcular frete");
+		const resultado = await resposta.json();
+        console.log(resultado);
+		// Supondo que o resultado tenha a propriedade frete
+		return resultado.price;
+	} catch (erro) {
+		console.error("Erro ao calcular frete:", erro);
+		return null;
+	}
+}
+
+const btnCalcularFrete = document.getElementById("btn-calcular-frete");
+const inputCep = document.getElementById("input-cep");
+const valorFrete = document.getElementById("valor-frete");
+
+btnCalcularFrete.addEventListener("click", async () => {
+	const cep = inputCep.value.trim();
+	const valorFrete = await calcularFrete(cep);	
+	const precoFormatado = valorFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+	document.querySelector("#valor-frete .valor").textContent = precoFormatado;
+	document.querySelector("#valor-frete").style.display = "flex";
+
+	const totalCarrinhoElemento = document.querySelector("#total-carrinho");
+	const valorTotalCarrinho = parseFloat(totalCarrinhoElemento.textContent.replace("Total: R$ ", "").replace('.', ',').replace(',', '.'));
+	
+	const totalComFrete = valorTotalCarrinho + valorFrete;
+	const totalComFreteFormatado = totalComFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+	totalCarrinhoElemento.textContent = `Total: R$ ${totalComFreteFormatado}`;
+});
